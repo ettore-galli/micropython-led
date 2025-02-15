@@ -5,7 +5,7 @@ from led_ui.base import BaseLed
 
 class Led(BaseLed):
     def __init__(self, pin_number: int) -> None:
-        self.pin: Pin = Pin(pin_number)
+        self.pin: Pin = Pin(pin_number, Pin.OUT)
 
     def on(self) -> None:
         self.pin.on()

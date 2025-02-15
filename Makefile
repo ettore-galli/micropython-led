@@ -18,22 +18,21 @@ test:
 
 all: lint test
 
-micro-cleanup-all:
+deploy-micro-cleanup-all:
 	mpremote run deploy/cleanup.py
 
-micro-common: 
+deploy-micro-common: 
 	mpremote fs cp python_dummies/typing.py :typing.py 
 	mpremote fs cp python_dummies/abc.py :abc.py 
 	mpremote fs mkdir collections 
 	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
 
-adc-module: micro-cleanup-all micro-common
+deploy: deploy-micro-cleanup-all deploy-micro-common
 	mpremote fs mkdir led_ui 
 	mpremote fs cp led_ui/base.py :led_ui/base.py 
-	mpremote fs cp led_ui/led_ui_logic.py :led_ui/led_ui_logic.py 
-	mpremote fs cp led_ui/hardware.py :led_ui/hardware.py 
-	mpremote fs cp led_ui/fft32.py :led_ui/fft32.py 
-	mpremote fs cp led_ui/display.py :led_ui/display.py 
+	mpremote fs cp led_ui/logic.py :led_ui/logic.py 
+	mpremote fs cp led_ui/led.py :led_ui/led.py 
+	mpremote fs cp led_ui/button.py :led_ui/button.py 
 	
 	mpremote fs cp led_ui/main.py :main.py 
 	mpremote reset
