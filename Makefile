@@ -32,6 +32,7 @@ deploy: deploy-micro-cleanup-all deploy-micro-common
 	mpremote fs cp led_ui/base.py :led_ui/base.py 
 	mpremote fs cp led_ui/logic.py :led_ui/logic.py 
 	mpremote fs cp led_ui/led.py :led_ui/led.py 
+	mpremote fs cp led_ui/timer.py :led_ui/timer.py 
 	mpremote fs cp led_ui/button.py :led_ui/button.py 
 	
 	mpremote fs cp led_ui/main.py :main.py 

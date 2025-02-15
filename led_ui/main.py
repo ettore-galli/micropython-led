@@ -1,11 +1,11 @@
-import time
-
 from led_ui.led import Led
+from led_ui.timer import Timer
 
 if __name__ == "__main__":
     led = Led(pin_number=15)
     while True:
+        timer = Timer()
         led.on()
-        time.sleep(0.333)
+        timer.sleep(0.333)
         led.off()
-        time.sleep(0.333)
+        timer.sleep(0.333)
