@@ -1,0 +1,4 @@
+mpremote
+micropy-cli
+micropy-cli[create_stubs]
+micropython-rp2-pico_w-stubs
