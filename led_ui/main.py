@@ -7,4 +7,4 @@ if __name__ == "__main__":
     led = Led(pin_number=15)
     button = Button(pin_number=16)
     ui = OneUI(config=OneUIConfiguration(led=led, timer=Timer(), button=button))
-    ui.demo_blink(delay=2)
+    ui.ui_loop()
