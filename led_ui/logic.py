@@ -15,6 +15,22 @@ class OneUIConfiguration:
         self.timer: BaseTimer = timer
 
 
+class SequenceStatus:
+    sequence: list[tuple[int, float]] | None
+    position: int
+    position_ticks_us: int
+
+    def __init__(
+        self,
+        sequence: list[tuple[int, float]] | None,
+        position: int,
+        position_ticks_us: int,
+    ) -> None:
+        self.sequence = sequence
+        self.position = position
+        self.position_ticks_us = position_ticks_us
+
+
 class OneUI:
     def __init__(self, config: OneUIConfiguration) -> None:
         self.config = config
@@ -40,6 +56,7 @@ class OneUI:
     def ui_loop(self) -> None:
         while self.shoud_run():
             value = self.config.button.value()
+
             if value == ButtonStatus.PRESSED:
 
                 self.notify_sequence(
