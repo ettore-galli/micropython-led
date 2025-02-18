@@ -48,6 +48,24 @@ class SequenceStatus:
         self.active = False
 
 
+class ButtonPressResult:
+    reliably_pressed: bool
+    last_press_ticks_us: int
+
+    def __init__(
+        self,
+        reliably_pressed: bool,
+        last_press_ticks_us: int,
+    ) -> None:
+        self.reliably_pressed = reliably_pressed
+        self.last_press_ticks_us = last_press_ticks_us
+
+    def __str__(self) -> str:
+        return (
+            f"{'PRESSED' if self.reliably_pressed else ''}; {self.last_press_ticks_us}"
+        )
+
+
 class OneUI:
     def __init__(self, config: OneUIConfiguration) -> None:
         self.config = config
@@ -61,6 +79,21 @@ class OneUI:
 
     def shoud_run(self) -> bool:
         return True
+
+    def get_button_press_result(
+        self, current_ticks: int, button_status: ButtonStatus, last_press_ticks_us: int
+    ) -> ButtonPressResult:
+        if button_status == ButtonStatus.PRESSED:
+            ticks_since_last = self.config.timer.ticks_diff(
+                current_ticks, last_press_ticks_us
+            )
+            if ticks_since_last > 500000:
+                return ButtonPressResult(
+                    reliably_pressed=True, last_press_ticks_us=current_ticks
+                )
+        return ButtonPressResult(
+            reliably_pressed=False, last_press_ticks_us=last_press_ticks_us
+        )
 
     def ui_loop(self) -> None:
         sequence_status = SequenceStatus(
@@ -96,17 +129,21 @@ class OneUI:
 
             current = self.config.timer.ticks_us()
 
-            if value == ButtonStatus.PRESSED:
-                ticks_since_last = self.config.timer.ticks_diff(
-                    current, sequence_status.last_press_ticks_us
-                )
-                if ticks_since_last > 100000:
-                    print("TICKS PASSED", ticks_since_last)
-                    sequence_status.last_press_ticks_us = current
-                    if not sequence_status.started():
-                        sequence_status.start(current)
-                    else:
-                        sequence_status.stop()
+            button_press_result = self.get_button_press_result(
+                current_ticks=current,
+                button_status=value,
+                last_press_ticks_us=sequence_status.last_press_ticks_us,
+            )
+
+            sequence_status.last_press_ticks_us = (
+                button_press_result.last_press_ticks_us
+            )
+
+            if button_press_result.reliably_pressed:
+                if not sequence_status.started():
+                    sequence_status.start(current)
+                else:
+                    sequence_status.stop()
 
             if sequence_status.started():
                 ticks = self.config.timer.ticks_diff(
