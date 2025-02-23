@@ -25,7 +25,6 @@ deploy-micro-common:
 	mpremote fs cp python_dummies/typing.py :typing.py 
 	mpremote fs cp python_dummies/abc.py :abc.py 
 	mpremote fs mkdir collections 
-	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
 
 deploy: deploy-micro-cleanup-all deploy-micro-common
 	mpremote fs mkdir led_ui 
