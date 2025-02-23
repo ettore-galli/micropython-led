@@ -25,7 +25,7 @@ class SequenceStatus:
     def __init__(
         self,
         sequence: list[tuple[int, float]],
-        active: bool,
+        active: bool,  # noqa: FBT001
         position: int,
         position_ticks_us: int,
         last_press_ticks_us: int,
@@ -54,7 +54,7 @@ class ButtonPressResult:
 
     def __init__(
         self,
-        reliably_pressed: bool,
+        reliably_pressed: bool,  # noqa: FBT001
         last_press_ticks_us: int,
     ) -> None:
         self.reliably_pressed = reliably_pressed
@@ -67,6 +67,9 @@ class ButtonPressResult:
 
 
 class OneUI:
+    RELIABLE_PRESS_DELAY: int = 500000
+    MICROSECONDS_PER_SECOND: int = 1000000
+
     def __init__(self, config: OneUIConfiguration) -> None:
         self.config = config
 
@@ -81,13 +84,13 @@ class OneUI:
         return True
 
     def get_button_press_result(
-        self, current_ticks: int, button_status: ButtonStatus, last_press_ticks_us: int
+        self, current_ticks: int, button_status: int, last_press_ticks_us: int
     ) -> ButtonPressResult:
         if button_status == ButtonStatus.PRESSED:
             ticks_since_last = self.config.timer.ticks_diff(
                 current_ticks, last_press_ticks_us
             )
-            if ticks_since_last > 500000:
+            if ticks_since_last > OneUI.RELIABLE_PRESS_DELAY:
                 return ButtonPressResult(
                     reliably_pressed=True, last_press_ticks_us=current_ticks
                 )
@@ -95,28 +98,74 @@ class OneUI:
             reliably_pressed=False, last_press_ticks_us=last_press_ticks_us
         )
 
+    @staticmethod
+    def get_sequence_to_play() -> list[tuple[int, float]]:
+        return [
+            (LedStatus.ON, 0.2),
+            (LedStatus.OFF, 0.2),
+            (LedStatus.ON, 0.2),
+            (LedStatus.OFF, 0.2),
+            (LedStatus.ON, 0.2),
+            (LedStatus.OFF, 0.6),
+            (LedStatus.ON, 0.6),
+            (LedStatus.OFF, 0.2),
+            (LedStatus.ON, 0.6),
+            (LedStatus.OFF, 0.2),
+            (LedStatus.ON, 0.6),
+            (LedStatus.OFF, 0.6),
+            (LedStatus.ON, 0.2),
+            (LedStatus.OFF, 0.2),
+            (LedStatus.ON, 0.2),
+            (LedStatus.OFF, 0.2),
+            (LedStatus.ON, 0.2),
+            (LedStatus.OFF, 0.6),
+        ]
+
+    def perform_sequence_step(
+        self,
+        button_value: int,
+        current_ticks: int,
+        sequence_status: SequenceStatus,
+    ) -> SequenceStatus:
+
+        button_press_result = self.get_button_press_result(
+            current_ticks=current_ticks,
+            button_status=button_value,
+            last_press_ticks_us=sequence_status.last_press_ticks_us,
+        )
+
+        sequence_status.last_press_ticks_us = button_press_result.last_press_ticks_us
+
+        if button_press_result.reliably_pressed:
+            if not sequence_status.started():
+                sequence_status.start(current_ticks)
+            else:
+                sequence_status.stop()
+
+        if sequence_status.started():
+            ticks = self.config.timer.ticks_diff(
+                current_ticks, sequence_status.position_ticks_us
+            )
+
+            status, duration_s = sequence_status.sequence[sequence_status.position]
+            duration_us = int(OneUI.MICROSECONDS_PER_SECOND * duration_s)
+
+            if ticks > duration_us:
+                sequence_status.position += 1
+                sequence_status.position_ticks_us = current_ticks
+
+                if sequence_status.position == len(sequence_status.sequence):
+                    sequence_status.stop()
+
+            if status == LedStatus.ON:
+                self.config.led.on()
+            else:
+                self.config.led.off()
+        return sequence_status
+
     def ui_loop(self) -> None:
         sequence_status = SequenceStatus(
-            sequence=[
-                (LedStatus.ON, 0.2),
-                (LedStatus.OFF, 0.2),
-                (LedStatus.ON, 0.2),
-                (LedStatus.OFF, 0.2),
-                (LedStatus.ON, 0.2),
-                (LedStatus.OFF, 0.6),
-                (LedStatus.ON, 0.6),
-                (LedStatus.OFF, 0.2),
-                (LedStatus.ON, 0.6),
-                (LedStatus.OFF, 0.2),
-                (LedStatus.ON, 0.6),
-                (LedStatus.OFF, 0.6),
-                (LedStatus.ON, 0.2),
-                (LedStatus.OFF, 0.2),
-                (LedStatus.ON, 0.2),
-                (LedStatus.OFF, 0.2),
-                (LedStatus.ON, 0.2),
-                (LedStatus.OFF, 0.6),
-            ],
+            sequence=self.get_sequence_to_play(),
             active=False,
             position=0,
             position_ticks_us=0,
@@ -129,38 +178,8 @@ class OneUI:
 
             current = self.config.timer.ticks_us()
 
-            button_press_result = self.get_button_press_result(
+            sequence_status = self.perform_sequence_step(
+                button_value=value,
                 current_ticks=current,
-                button_status=value,
-                last_press_ticks_us=sequence_status.last_press_ticks_us,
+                sequence_status=sequence_status,
             )
-
-            sequence_status.last_press_ticks_us = (
-                button_press_result.last_press_ticks_us
-            )
-
-            if button_press_result.reliably_pressed:
-                if not sequence_status.started():
-                    sequence_status.start(current)
-                else:
-                    sequence_status.stop()
-
-            if sequence_status.started():
-                ticks = self.config.timer.ticks_diff(
-                    current, sequence_status.position_ticks_us
-                )
-
-                status, duration_s = sequence_status.sequence[sequence_status.position]
-                duration_us = int(1000000 * duration_s)
-
-                if ticks > duration_us:
-                    sequence_status.position += 1
-                    sequence_status.position_ticks_us = current
-
-                    if sequence_status.position == len(sequence_status.sequence):
-                        sequence_status.stop()
-
-                if status == LedStatus.ON:
-                    self.config.led.on()
-                else:
-                    self.config.led.off()
