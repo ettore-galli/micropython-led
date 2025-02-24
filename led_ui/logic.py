@@ -4,6 +4,7 @@ from led_ui.base import (
     BaseTimer,
     ButtonStatus,
     LedStatus,
+    PwmStatus,
 )
 
 
@@ -183,3 +184,19 @@ class OneUI:
                 current_ticks=current,
                 sequence_status=sequence_status,
             )
+
+
+class Strobo:
+    def __init__(self, config: OneUIConfiguration) -> None:
+        self.config = config
+
+    def strobo_loop(self, frequency: float) -> None:
+        pwm_status: int = 0
+        while True:
+            if self.config.button.value() == ButtonStatus.PRESSED:
+                if pwm_status == PwmStatus.OFF:
+                    pwm_status = PwmStatus.ON
+                    self.config.led.start_pwm(frequency=frequency)
+            elif pwm_status == PwmStatus.ON:
+                pwm_status = PwmStatus.OFF
+                self.config.led.stop_pwm()

@@ -6,6 +6,11 @@ class ButtonStatus:
     RELEASED: int = 0
 
 
+class PwmStatus:
+    ON: int = 1
+    OFF: int = 0
+
+
 class LedStatus:
     ON: int = 1
     OFF: int = 0
@@ -37,3 +42,9 @@ class BaseLed(ABC):
 
     @abstractmethod
     def off(self) -> None: ...
+
+    @abstractmethod
+    def start_pwm(self, frequency: float) -> None: ...
+
+    @abstractmethod
+    def stop_pwm(self) -> None: ...
