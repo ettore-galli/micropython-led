@@ -39,6 +39,7 @@ deploy-web:
 	deploy/safe_putdir.sh web
 	mpremote fs cp led/web/led.html :web/led.html 
 	mpremote fs cp led/web/wifi.html :web/wifi.html 
+	mpremote fs cp led/web/ip.html :web/ip.html 
 
 deploy-common: 
 	mpremote fs cp python_dummies/typing.py :typing.py 
@@ -53,6 +54,7 @@ deploy-code:
 	mpremote fs cp led/engine.py :led/engine.py 
 	mpremote fs cp led/hardware.py :led/hardware.py 
 	mpremote fs cp led/web_server.py :led/web_server.py 
+	mpremote fs cp led/network_service.py :led/network_service.py 
 	mpremote fs cp led/main.py :main.py 
 
 deploy-dev: \

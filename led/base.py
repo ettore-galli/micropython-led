@@ -12,15 +12,18 @@ WEB_PAGES_PATH: str = "./web"
 
 WEB_PAGE_INDEX_WIFI = "wifi"
 WEB_PAGE_INDEX_LED = "led"
+WEB_PAGE_INDEX_IP = "ip"
 
 WEB_PAGES: dict[str, str] = {
     WEB_PAGE_INDEX_LED: "led.html",
     WEB_PAGE_INDEX_WIFI: "wifi.html",
+    WEB_PAGE_INDEX_IP: "ip.html",
 }
 
 DATA_FILES: dict[str, str] = {
     WEB_PAGE_INDEX_LED: "./data/led.json",
     WEB_PAGE_INDEX_WIFI: "./data/wifi.json",
+    WEB_PAGE_INDEX_IP: "",
 }
 
 rpi_logger = print
@@ -93,14 +96,6 @@ class BaseWifiClient(ABC):
         pass
 
 
-class BaseWebServer(ABC):
-    @abstractmethod
-    def __init__(self) -> None: ...
-    @abstractmethod
-    async def startup(self) -> None:
-        pass
-
-
 class BaseDataService(ABC):
 
     def __init__(self, data_file: str) -> None:
@@ -111,3 +106,16 @@ class BaseDataService(ABC):
 
     @abstractmethod
     def save_data(self, data: dict[str, Any]) -> None: ...
+
+
+class BaseWebServer(ABC):
+    @abstractmethod
+    def __init__(
+        self,
+        led_data_service: BaseDataService,
+        wifi_data_service: BaseDataService,
+        network_data_service: BaseDataService,
+    ) -> None: ...
+    @abstractmethod
+    async def startup(self) -> None:
+        pass

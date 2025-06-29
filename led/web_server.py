@@ -4,16 +4,14 @@ from typing import Any
 from microdot.microdot import Microdot, Request  # type: ignore[attr-defined]
 
 from led.base import (
-    DATA_FILES,
+    WEB_PAGE_INDEX_IP,
     WEB_PAGE_INDEX_LED,
     WEB_PAGE_INDEX_WIFI,
     WEB_PAGES,
     WEB_PAGES_PATH,
     BaseDataService,
     BaseWebServer,
-    rpi_logger,
 )
-from led.data_service import DataService
 
 HTTP_OK = 200
 
@@ -89,14 +87,16 @@ async def process_page_repl(
 
 class WebServer(BaseWebServer):
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        led_data_service: BaseDataService,
+        wifi_data_service: BaseDataService,
+        network_data_service: BaseDataService,
+    ) -> None:
         self.app = Microdot()
-        self.led_data_service = DataService(
-            data_file=DATA_FILES[WEB_PAGE_INDEX_LED], logger=rpi_logger
-        )
-        self.wifi_data_service = DataService(
-            data_file=DATA_FILES[WEB_PAGE_INDEX_WIFI], logger=rpi_logger
-        )
+        self.led_data_service = led_data_service
+        self.wifi_data_service = wifi_data_service
+        self.network_data_service = network_data_service
 
         @self.app.route("/led", methods=[METHOD_GET, METHOD_POST])
         async def led_page(
@@ -117,6 +117,17 @@ class WebServer(BaseWebServer):
                 data_service=self.wifi_data_service,
                 page_id=WEB_PAGE_INDEX_WIFI,
                 invariant_rendering_data={"action": WEB_PAGE_INDEX_WIFI},
+                request=request,
+            )
+
+        @self.app.route("/ip", methods=[METHOD_GET])
+        async def ip_page(
+            request: Request,
+        ) -> tuple[str, int, dict[str, str]]:
+            return await process_page_repl(
+                data_service=self.network_data_service,
+                page_id=WEB_PAGE_INDEX_IP,
+                invariant_rendering_data={},
                 request=request,
             )
 

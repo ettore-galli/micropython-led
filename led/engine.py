@@ -4,7 +4,10 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 from led.base import (
+    DATA_FILES,
     PICO_W_INTERNAL_LED_PIN,
+    WEB_PAGE_INDEX_LED,
+    WEB_PAGE_INDEX_WIFI,
     AccessPointInformation,
     BaseAccessPoint,
     BasePin,
@@ -12,8 +15,11 @@ from led.base import (
     BaseWebServer,
     BaseWifiClient,
     WifiClientInformation,
+    rpi_logger,
 )
+from led.data_service import DataService
 from led.hardware import ACCESS_POINT_INFORMATION
+from led.network_service import NetworkData
 
 if TYPE_CHECKING:
     from led.base import SpecialPins
@@ -68,7 +74,15 @@ class LedBlinkerEngine:
         )
 
         self.web_server_class = web_server_class
-        self.web_server = self.web_server_class()
+        self.web_server = self.web_server_class(
+            led_data_service=DataService(
+                data_file=DATA_FILES[WEB_PAGE_INDEX_LED], logger=rpi_logger
+            ),
+            wifi_data_service=DataService(
+                data_file=DATA_FILES[WEB_PAGE_INDEX_WIFI], logger=rpi_logger
+            ),
+            network_data_service=NetworkData(),
+        )
 
     def log(self, message: str) -> None:
         sys.stdout.write(f"{self.time.ticks_ms()}: {message}\n")
