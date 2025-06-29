@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Config</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #666;
+        }
+
+
+        form {
+            width: fit-content;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            margin: 0 auto;
+            gap: 10px;
+        }
+
+        label {
+            grid-column: 1 / span 2;
+            text-align: left;
+        }
+
+        input {
+            grid-column: 3 / span 4;
+        }
+
+        #submit {
+            grid-column: 1 / span 3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Configurazione WiFi</h1>
+    <form action="/**ACTION**" method="post">
+
+        <label for="ssid">SSID:</label>
+        <input type="text" name="ssid" id="ssid" value="**SSID**">
+
+        <label for="password">Password:</label>
+        <input type="text" name="password" id="password" value="**PASSWORD**">
+
+        <input id="submit" type="submit" value="SAVE">
+
+    </form>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('datetime').textContent = now.toLocaleString();
+        }
+        setInterval(updateDateTime, 1000); // Aggiorna ogni secondo
+        updateDateTime(); // Chiamata iniziale
+    </script>
+</body>
+
+</html>

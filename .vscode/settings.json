@@ -3,7 +3,7 @@
     "python.testing.pytestArgs": [
         "-s",
         "-vvv",
-        "tests/led_ui"
+        "tests/led"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true

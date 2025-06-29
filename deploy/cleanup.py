@@ -1,11 +1,11 @@
 import os
 
-DIRECTORY_MARKER = 32768
-FILE_MARKER = 16384
+DIRECTORY_MARKER = 16384
+FILE_MARKER = 32768
 
 
 def notify(*args: str) -> None:
-    print(*args)  # noqa: T201
+    print(*args)
 
 
 def join(path_a: str, path_b: str) -> str:
@@ -25,12 +25,12 @@ def list_directories(base: str) -> list:
 def cleanup(base: str = ".") -> None:
     notify(f"Cleaning up {base}")
 
-    for f in list_directories(base):
+    for f in list_files(base):
         file_to_remove = join(base, f)
         notify(f"removing file: {file_to_remove}")
         os.remove(file_to_remove)  # noqa:  PTH107 (micropython)
 
-    for d in list_files(base):
+    for d in list_directories(base):
         dir_to_remove = join(base, d)
         notify(f"removing dir: {dir_to_remove}")
         cleanup(dir_to_remove)

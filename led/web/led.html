@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Config</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Configurazione</h1>
+    <form action="/**ACTION**" method="post">
+        <label for="number_of_flashes">Number:</label>
+        <input type="number" name="number_of_flashes" id="number_of_flashes" value="**NUMBER_OF_FLASHES**">
+        <input type="submit" value="SAVE">
+    </form>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('datetime').textContent = now.toLocaleString();
+        }
+        setInterval(updateDateTime, 1000); // Aggiorna ogni secondo
+        updateDateTime(); // Chiamata iniziale
+    </script>
+</body>
+
+</html>

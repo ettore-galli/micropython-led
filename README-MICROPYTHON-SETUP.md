@@ -92,7 +92,7 @@ from machine import ADC, Pin, I2C  # type: ignore
 ## Create a new project
 
 ```txt
-led_ui
+led
     __init__.py
     main.py
 ```
