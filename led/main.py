@@ -1,6 +1,6 @@
 import asyncio
 
-from led.engine import ControlDemoEngine
+from led.engine import LedBlinkerEngine
 from led.hardware import (
     AccessPoint,
     HardwarePin,
@@ -11,7 +11,7 @@ from led.hardware import (
 from led.web_server import WebServer
 
 if __name__ == "__main__":
-    control_demo = ControlDemoEngine(
+    control_demo = LedBlinkerEngine(
         time=HardwareTime(),
         pin_class=HardwarePin,
         access_point_class=AccessPoint,

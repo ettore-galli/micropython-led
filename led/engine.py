@@ -24,7 +24,7 @@ class HardwareInformation:
         self.led_pin: int | SpecialPins = PICO_W_INTERNAL_LED_PIN
 
 
-class ControlDemoEngine:
+class LedBlinkerEngine:
     LED_ON: int = 1
     LED_OFF: int = 0
 

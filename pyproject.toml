@@ -53,7 +53,7 @@ lint.ignore = [
   "PT001", # https://github.com/astral-sh/ruff/issues/8796#issuecomment-1825907715
   "PT023", # https://github.com/astral-sh/ruff/issues/8796#issuecomment-1825907715
   "PTH123", # Micropython specific
-  "T201" # Explicitly allow for print in micropython projects
+  "T201", # Explicitly allow for print in micropython projects
 ]
 lint.select = ["ALL"]
 src = ["led"]

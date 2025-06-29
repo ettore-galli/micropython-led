@@ -2,11 +2,11 @@ all_targets=led/ tests/ deploy/
 
 install:
 	pip install .
-	pip install ."[development]"
-	pip install ."[micropython_deploy]"
-	pip install ."[format]"
-	pip install ."[lint]"
-	pip install ."[test]"
+	pip install .[development]
+	pip install .[micropython_deploy]
+	pip install .[format]
+	pip install .[lint]
+	pip install .[test]
 
 lint:
 	black $(all_targets)
