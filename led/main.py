@@ -2,9 +2,11 @@ import asyncio
 
 from led.engine import LedBlinkerEngine
 from led.hardware import (
-    AccessPoint,
     HardwarePin,
     HardwareTime,
+)
+from led.network_service import (
+    AccessPoint,
     WifiClient,
     retrieve_wifi_client_information,
 )

@@ -87,9 +87,14 @@ EMPTY_WIFI_CLIENT_INFORMATION = WifiClientInformation(ssid="", password="")
 
 class BaseWifiClient(ABC):
     def __init__(
-        self, wifi_client_information_retriever: Callable[[], WifiClientInformation]
+        self,
+        wifi_client_information_retriever: Callable[[], WifiClientInformation],
+        time: BaseTime,
+        logger: Callable[[str], None] = rpi_logger,
     ) -> None:
         self.wifi_client_information_retriever = wifi_client_information_retriever
+        self.time = time
+        self.logger = logger
 
     @abstractmethod
     async def startup(self) -> None:

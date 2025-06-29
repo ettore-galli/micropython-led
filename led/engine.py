@@ -18,7 +18,7 @@ from led.base import (
     rpi_logger,
 )
 from led.data_service import DataService
-from led.hardware import ACCESS_POINT_INFORMATION
+from led.hardware import ACCESS_POINT_INFORMATION, HardwareTime
 from led.network_service import NetworkData
 
 if TYPE_CHECKING:
@@ -70,7 +70,8 @@ class LedBlinkerEngine:
         self.wifi_client_information_retriever = wifi_client_information_retriever
         self.wifi_client_class = wifi_client_class
         self.wifi_client = self.wifi_client_class(
-            wifi_client_information_retriever=self.wifi_client_information_retriever
+            wifi_client_information_retriever=self.wifi_client_information_retriever,
+            time=HardwareTime(),
         )
 
         self.web_server_class = web_server_class
