@@ -1,7 +1,9 @@
 import asyncio
 
+from led.base import AccessPointInformation
 from led.engine import LedBlinkerEngine
 from led.hardware import (
+    ACCESS_POINT_INFORMATION,
     HardwareInformation,
     HardwarePin,
     HardwareTime,
@@ -14,10 +16,14 @@ from led.network_service import (
 )
 from led.web_server import WebServer
 
+hardware_information: HardwareInformation = HardwareInformation()
+
+access_point_information: AccessPointInformation = ACCESS_POINT_INFORMATION
+
 light_service = LightService(
     time=HardwareTime(),
     pin_class=HardwarePin,
-    hardware_information=HardwareInformation(),
+    hardware_information=hardware_information,
     light_blink_information_retriever=retrieve_light_blink_information,
 )
 
@@ -29,6 +35,8 @@ if __name__ == "__main__":
         wifi_client_class=WifiClient,
         wifi_client_information_retriever=retrieve_wifi_client_information,
         web_server_class=WebServer,
+        hardware_information=hardware_information,
         light_service=light_service,
+        access_point_information=access_point_information,
     )
     asyncio.run(control_demo.main())

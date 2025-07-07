@@ -16,7 +16,7 @@ from led.base import (
     rpi_logger,
 )
 from led.data_service import DataService
-from led.hardware import ACCESS_POINT_INFORMATION, HardwareInformation, HardwareTime
+from led.hardware import HardwareInformation, HardwareTime
 from led.light_service import LightService
 from led.network_service import NetworkData
 
@@ -34,23 +34,14 @@ class LedBlinkerEngine:
         wifi_client_class: type[BaseWifiClient],
         wifi_client_information_retriever: Callable[[], WifiClientInformation],
         light_service: LightService,
-        hardware_information: HardwareInformation | None = None,
-        access_point_information: AccessPointInformation | None = None,
+        hardware_information: HardwareInformation,
+        access_point_information: AccessPointInformation,
     ) -> None:
         self.time: BaseTime = time
         self.pin_class: type[BasePin] = pin_class
 
-        self.hardware_information = (
-            hardware_information
-            if hardware_information is not None
-            else HardwareInformation()
-        )
-
-        self.access_point_information = (
-            access_point_information
-            if access_point_information is not None
-            else ACCESS_POINT_INFORMATION
-        )
+        self.hardware_information = hardware_information
+        self.access_point_information = access_point_information
 
         self.access_point_class = access_point_class
         self.access_point = self.access_point_class(
