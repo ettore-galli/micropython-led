@@ -55,13 +55,14 @@ deploy-code:
 	mpremote fs cp led/hardware.py :led/hardware.py 
 	mpremote fs cp led/web_server.py :led/web_server.py 
 	mpremote fs cp led/network_service.py :led/network_service.py 
+	mpremote fs cp led/light_service.py :led/light_service.py 
 	mpremote fs cp led/main.py :main.py 
 
 deploy-dev: \
 	deploy-web \
 	deploy-code
 
-	@make partial_deploy_warning
+	@make partial-deploy-warning
 	mpremote reset
 
 deploy-full: \

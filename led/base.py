@@ -124,3 +124,26 @@ class BaseWebServer(ABC):
     @abstractmethod
     async def startup(self) -> None:
         pass
+
+
+class LightBlinkInformation:
+    def __init__(self, number_of_flashes: int) -> None:
+        self.number_of_flashes: int = number_of_flashes
+        self.flash_duration: float = 0.2
+        self.intra_flash_delay: float = 0.3
+        self.intra_loop_delay: float = 1.0
+
+
+DEFAULT_LIGHT_BLINK_INFORMATION = LightBlinkInformation(number_of_flashes=3)
+
+
+class BaseLightService(ABC):
+    def __init__(
+        self,
+        light_blink_information_retriever: Callable[[], LightBlinkInformation],
+    ) -> None:
+        self.light_blink_information_retriever = light_blink_information_retriever
+
+    @abstractmethod
+    async def blink_loop(self) -> None:
+        pass

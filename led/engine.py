@@ -1,11 +1,9 @@
 import asyncio
 import sys
 from collections.abc import Callable
-from typing import TYPE_CHECKING
 
 from led.base import (
     DATA_FILES,
-    PICO_W_INTERNAL_LED_PIN,
     WEB_PAGE_INDEX_LED,
     WEB_PAGE_INDEX_WIFI,
     AccessPointInformation,
@@ -18,16 +16,9 @@ from led.base import (
     rpi_logger,
 )
 from led.data_service import DataService
-from led.hardware import ACCESS_POINT_INFORMATION, HardwareTime
+from led.hardware import ACCESS_POINT_INFORMATION, HardwareInformation, HardwareTime
+from led.light_service import LightService
 from led.network_service import NetworkData
-
-if TYPE_CHECKING:
-    from led.base import SpecialPins
-
-
-class HardwareInformation:
-    def __init__(self) -> None:
-        self.led_pin: int | SpecialPins = PICO_W_INTERNAL_LED_PIN
 
 
 class LedBlinkerEngine:
@@ -42,6 +33,7 @@ class LedBlinkerEngine:
         web_server_class: type[BaseWebServer],
         wifi_client_class: type[BaseWifiClient],
         wifi_client_information_retriever: Callable[[], WifiClientInformation],
+        light_service: LightService,
         hardware_information: HardwareInformation | None = None,
         access_point_information: AccessPointInformation | None = None,
     ) -> None:
@@ -59,8 +51,6 @@ class LedBlinkerEngine:
             if access_point_information is not None
             else ACCESS_POINT_INFORMATION
         )
-
-        self.led = self.pin_class(self.hardware_information.led_pin, self.pin_class.OUT)
 
         self.access_point_class = access_point_class
         self.access_point = self.access_point_class(
@@ -85,20 +75,14 @@ class LedBlinkerEngine:
             network_data_service=NetworkData(),
         )
 
+        self.light_service = light_service
+
     def log(self, message: str) -> None:
         sys.stdout.write(f"{self.time.ticks_ms()}: {message}\n")
 
-    async def led_loop(self) -> None:
-        while True:
-            self.led.on()
-            await self.time.sleep(1)
-
-            self.led.off()
-            await self.time.sleep(1)
-
     async def main(self) -> None:
         await asyncio.gather(
-            self.led_loop(),
+            self.light_service.led_loop(),
             self.access_point.startup(),
             self.web_server.startup(),
             self.wifi_client.startup(),
