@@ -39,7 +39,6 @@ wifi_client = WifiClient(
 if __name__ == "__main__":
     control_demo = LedBlinkerEngine(
         time=HardwareTime(),
-        pin_class=HardwarePin,
         access_point=access_point,
         wifi_client=wifi_client,
         web_server_class=WebServer,

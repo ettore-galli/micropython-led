@@ -7,7 +7,6 @@ from led.base import (
     WEB_PAGE_INDEX_WIFI,
     BaseAccessPoint,
     BaseLightService,
-    BasePin,
     BaseTime,
     BaseWebServer,
     BaseWifiClient,
@@ -22,17 +21,15 @@ class LedBlinkerEngine:
     LED_ON: int = 1
     LED_OFF: int = 0
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         time: BaseTime,
-        pin_class: type[BasePin],
         access_point: BaseAccessPoint,
         web_server_class: type[BaseWebServer],
         wifi_client: BaseWifiClient,
         light_service: LightService,
     ) -> None:
         self.time: BaseTime = time
-        self.pin_class: type[BasePin] = pin_class
 
         self.access_point: BaseAccessPoint = access_point
 
