@@ -2,19 +2,13 @@ import asyncio
 import sys
 
 from led.base import (
-    DATA_FILES,
-    WEB_PAGE_INDEX_LED,
-    WEB_PAGE_INDEX_WIFI,
     BaseAccessPoint,
     BaseLightService,
     BaseTime,
     BaseWebServer,
     BaseWifiClient,
-    rpi_logger,
 )
-from led.data_service import DataService
 from led.light_service import LightService
-from led.network_service import NetworkData
 
 
 class LedBlinkerEngine:
@@ -25,7 +19,7 @@ class LedBlinkerEngine:
         self,
         time: BaseTime,
         access_point: BaseAccessPoint,
-        web_server_class: type[BaseWebServer],
+        web_server: BaseWebServer,
         wifi_client: BaseWifiClient,
         light_service: LightService,
     ) -> None:
@@ -37,16 +31,7 @@ class LedBlinkerEngine:
 
         self.light_service: BaseLightService = light_service
 
-        self.web_server_class = web_server_class
-        self.web_server = self.web_server_class(
-            led_data_service=DataService(
-                data_file=DATA_FILES[WEB_PAGE_INDEX_LED], logger=rpi_logger
-            ),
-            wifi_data_service=DataService(
-                data_file=DATA_FILES[WEB_PAGE_INDEX_WIFI], logger=rpi_logger
-            ),
-            network_data_service=NetworkData(),
-        )
+        self.web_server: BaseWebServer = web_server
 
     def log(self, message: str) -> None:
         sys.stdout.write(f"{self.time.ticks_ms()}: {message}\n")
