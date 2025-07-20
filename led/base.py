@@ -145,5 +145,5 @@ class BaseLightService(ABC):
         self.light_blink_information_retriever = light_blink_information_retriever
 
     @abstractmethod
-    async def blink_loop(self) -> None:
+    async def led_loop(self) -> None:
         pass

@@ -31,13 +31,17 @@ access_point: BaseAccessPoint = AccessPoint(
     access_point_information=access_point_information
 )
 
+wifi_client = WifiClient(
+    wifi_client_information_retriever=retrieve_wifi_client_information,
+    time=HardwareTime(),
+)
+
 if __name__ == "__main__":
     control_demo = LedBlinkerEngine(
         time=HardwareTime(),
         pin_class=HardwarePin,
         access_point=access_point,
-        wifi_client_class=WifiClient,
-        wifi_client_information_retriever=retrieve_wifi_client_information,
+        wifi_client=wifi_client,
         web_server_class=WebServer,
         light_service=light_service,
     )
