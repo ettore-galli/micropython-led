@@ -1,4 +1,5 @@
 import asyncio
+import re
 from typing import Any
 
 from microdot.microdot import Microdot, Request  # type: ignore[attr-defined]
@@ -42,13 +43,14 @@ def get_data_from_request(request: Request) -> dict[str, Any]:
     return {key: request.form.get(key, None) for key in request.form}
 
 
-def render_page_using_data(raw_page: str, raw_data: dict) -> str:
-    def field_template_tag(field: str) -> str:
-        return f"**{field.upper()}**"
+def replace_tag(raw_page: str, field: str, value: Any) -> str:  # noqa: ANN401
+    return re.sub(rf"{{%\s*{field.lower()}\s*%}}", str(value), raw_page)
 
+
+def render_page_using_data(raw_page: str, raw_data: dict) -> str:
     rendered = raw_page
     for field, value in raw_data.items():
-        rendered = rendered.replace(field_template_tag(field), str(value))
+        rendered = replace_tag(raw_page=rendered, field=field, value=value)
     return rendered
 
 

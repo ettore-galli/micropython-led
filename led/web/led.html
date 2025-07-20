@@ -25,9 +25,9 @@
 
     <h1>Configurazione</h1>
     
-    <form action="/**ACTION**" method="post">
+    <form action="{% action %}" method="post">
         <label for="number_of_flashes">Number:</label>
-        <input type="number" name="number_of_flashes" id="number_of_flashes" value="**NUMBER_OF_FLASHES**">
+        <input type="number" name="number_of_flashes" id="number_of_flashes" value="{% number_of_flashes %}">
         <input type="submit" value="SAVE">
     </form>
 

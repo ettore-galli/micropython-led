@@ -47,13 +47,13 @@
 
     <h1>Configurazione WiFi</h1>
     
-    <form action="/**ACTION**" method="post">
+    <form action="/{% action %}" method="post">
 
         <label for="ssid">SSID:</label>
-        <input type="text" name="ssid" id="ssid" value="**SSID**">
+        <input type="text" name="ssid" id="ssid" value="{% ssid %}">
 
         <label for="password">Password:</label>
-        <input type="password" name="password" id="password" value="**PASSWORD**">
+        <input type="password" name="password" id="password" value="{% password %}">
 
         <input id="submit" type="submit" value="SAVE">
 
