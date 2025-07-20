@@ -39,7 +39,6 @@ if __name__ == "__main__":
         wifi_client_class=WifiClient,
         wifi_client_information_retriever=retrieve_wifi_client_information,
         web_server_class=WebServer,
-        hardware_information=hardware_information,
         light_service=light_service,
     )
     asyncio.run(control_demo.main())
