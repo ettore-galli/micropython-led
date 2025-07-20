@@ -6,7 +6,6 @@ from led.base import (
     DATA_FILES,
     WEB_PAGE_INDEX_LED,
     WEB_PAGE_INDEX_WIFI,
-    AccessPointInformation,
     BaseAccessPoint,
     BasePin,
     BaseTime,
@@ -29,24 +28,19 @@ class LedBlinkerEngine:
         self,
         time: BaseTime,
         pin_class: type[BasePin],
-        access_point_class: type[BaseAccessPoint],
+        access_point: BaseAccessPoint,
         web_server_class: type[BaseWebServer],
         wifi_client_class: type[BaseWifiClient],
         wifi_client_information_retriever: Callable[[], WifiClientInformation],
         light_service: LightService,
         hardware_information: HardwareInformation,
-        access_point_information: AccessPointInformation,
     ) -> None:
         self.time: BaseTime = time
         self.pin_class: type[BasePin] = pin_class
 
         self.hardware_information = hardware_information
-        self.access_point_information = access_point_information
 
-        self.access_point_class = access_point_class
-        self.access_point = self.access_point_class(
-            access_point_information=self.access_point_information
-        )
+        self.access_point: BaseAccessPoint = access_point
 
         self.wifi_client_information_retriever = wifi_client_information_retriever
         self.wifi_client_class = wifi_client_class
