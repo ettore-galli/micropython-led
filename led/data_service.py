@@ -12,9 +12,24 @@ from led.base import (
 
 
 class DataService(BaseDataService):
-    def __init__(self, data_file: str, logger: Callable[[str], None]) -> None:
+    def __init__(
+        self,
+        data_file: str,
+        logger: Callable[[str], None],
+        model: dict[str, type] | None = None,
+    ) -> None:
         super().__init__(data_file)
         self.logger: Callable[[str], None] = logger
+        self.model: dict[str, type] | None = model
+
+    @staticmethod
+    def cast_data_to_model(
+        data: dict[str, Any], model: dict[str, type]
+    ) -> dict[str, Any]:
+        return {
+            key: model[key](value) if key in model else value
+            for key, value in data.items()
+        }
 
     def get_data(self) -> dict[str, Any]:
         try:
