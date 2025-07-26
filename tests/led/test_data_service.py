@@ -65,3 +65,33 @@ def test_cast_data_to_model() -> None:
         DataService.cast_data_to_model(data=actual_input_data, model=model)
         == example_target_data
     )
+
+
+def test_data_service_save_data_according_to_model() -> None:
+    with TemporaryDirectory() as data_dir:
+        data_file = Path(data_dir) / "data.txt"
+        model = {
+            "age": int,
+            "favourite_number": float,
+        }
+
+        ds = DataService(data_file=str(data_file), logger=lambda _: None, model=model)
+
+        example_data = {
+            "name": "ettore",
+            "age": "52",
+            "favourite_number": "3.1415",
+        }
+
+        ds.save_data(example_data)
+        retrieved_data = ds.get_data()
+
+        assert retrieved_data == {
+            "name": "ettore",
+            "age": 52,
+            "favourite_number": 3.1415,
+        }
+
+        assert type(retrieved_data["name"]) is str
+        assert type(retrieved_data["age"]) is int
+        assert type(retrieved_data["favourite_number"]) is float

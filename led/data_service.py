@@ -42,7 +42,14 @@ class DataService(BaseDataService):
     def save_data(self, data: dict[str, Any]) -> None:
         try:
             with open(self.data_file, "w", encoding="utf-8") as datafile:
-                return json.dump(data, datafile)
+                return json.dump(
+                    (
+                        self.cast_data_to_model(data, self.model)
+                        if self.model is not None
+                        else data
+                    ),
+                    datafile,
+                )
         except OSError as error:
             self.logger(str(error))
 
