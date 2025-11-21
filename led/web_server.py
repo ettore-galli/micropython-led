@@ -2,7 +2,7 @@ import asyncio
 import re
 from typing import Any
 
-from microdot.microdot import Microdot, Request  # type: ignore[attr-defined]
+from microdot.microdot import Microdot, Request, send_file  # type: ignore[attr-defined]
 
 from led.base import (
     WEB_PAGE_INDEX_IP,
@@ -99,6 +99,13 @@ class WebServer(BaseWebServer):
         self.led_data_service = led_data_service
         self.wifi_data_service = wifi_data_service
         self.network_data_service = network_data_service
+
+        @self.app.route('/static/<path:path>')
+        async def static(_, path):
+            if '..' in path:
+                # directory traversal is not allowed
+                return 'Not found', 404
+            return send_file('static/' + path, max_age=86400)
 
         @self.app.route("/led", methods=[METHOD_GET, METHOD_POST])
         async def led_page(
