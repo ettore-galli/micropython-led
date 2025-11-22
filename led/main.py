@@ -2,6 +2,7 @@ import asyncio
 
 from led.base import (
     DATA_FILES,
+    LED_PIN_15,
     WEB_PAGE_INDEX_LED,
     WEB_PAGE_INDEX_WIFI,
     AccessPointInformation,
@@ -26,7 +27,7 @@ from led.network_service import (
 )
 from led.web_server import WebServer
 
-hardware_information: HardwareInformation = HardwareInformation()
+hardware_information: HardwareInformation = HardwareInformation(led_pin=LED_PIN_15)
 
 access_point_information: AccessPointInformation = ACCESS_POINT_INFORMATION
 

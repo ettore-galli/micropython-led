@@ -43,5 +43,5 @@ ACCESS_POINT_INFORMATION = AccessPointInformation(
 
 
 class HardwareInformation:
-    def __init__(self) -> None:
-        self.led_pin: int | SpecialPins = PICO_W_INTERNAL_LED_PIN
+    def __init__(self, led_pin: int | SpecialPins = PICO_W_INTERNAL_LED_PIN) -> None:
+        self.led_pin: int | SpecialPins = led_pin
