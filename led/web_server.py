@@ -105,7 +105,7 @@ class WebServer(BaseWebServer):
             if ".." in path:
                 # directory traversal is not allowed
                 return "Not found", 404
-            return send_file("static/" + path, max_age=86400)
+            return send_file("web/images/" + path, max_age=86400)
 
         @self.app.route("/led", methods=[METHOD_GET, METHOD_POST])
         async def led_page(
