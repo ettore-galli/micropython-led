@@ -7,7 +7,7 @@ Incomplete: TypeAlias = Any
 SpecialPins: TypeAlias = str
 
 PICO_W_INTERNAL_LED_PIN: SpecialPins = "LED"
-LED_PIN_15: SpecialPins = 15
+LED_PIN_15: int = 15
 
 WEB_PAGES_PATH: str = "./web"
 

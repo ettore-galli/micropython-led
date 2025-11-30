@@ -94,8 +94,9 @@ class WebServer(BaseWebServer):
         led_data_service: BaseDataService,
         wifi_data_service: BaseDataService,
         network_data_service: BaseDataService,
+        app_class: type[Any] | None = None,
     ) -> None:
-        self.app = Microdot()
+        self.app = app_class() if app_class is not None else Microdot()
         self.led_data_service = led_data_service
         self.wifi_data_service = wifi_data_service
         self.network_data_service = network_data_service
