@@ -101,12 +101,14 @@ class WebServer(BaseWebServer):
         self.wifi_data_service = wifi_data_service
         self.network_data_service = network_data_service
 
-        @self.app.route("/static/<path:path>")
+        @self.app.route("/static/images/<path:path>")
         async def static(_: str, path: str) -> Response:
             if ".." in path:
                 # directory traversal is not allowed
                 return "Not found", 404
-            return send_file("web/images/" + path, max_age=86400)
+            full_file_fqn: str = "web/images/" + path
+            print("sending file ", full_file_fqn)
+            return send_file(full_file_fqn, max_age=86400)
 
         @self.app.route("/led", methods=[METHOD_GET, METHOD_POST])
         async def led_page(
