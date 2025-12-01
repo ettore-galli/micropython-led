@@ -1,4 +1,4 @@
-all_targets=led/ tests/ deploy/
+all_targets=src/led/ tests/ deploy/
 
 install:
 	pip install .
@@ -37,24 +37,14 @@ deploy-data-dir:
 
 deploy-web:
 	deploy/safe_rmdir.sh web
-	mpremote fs cp -r led/web :web
+	mpremote fs cp -r src/web :web
 
-deploy-common: 
-	mpremote fs cp python_dummies/typing.py :typing.py 
-	mpremote fs cp python_dummies/abc.py :abc.py 
-	mpremote fs mkdir collections 
-	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
+deploy-python-dummies: 
+	mpremote fs cp -r python-dummies/* ":"
 
 deploy-code:
-	deploy/safe_putdir.sh led
-	mpremote fs cp led/base.py :led/base.py 
-	mpremote fs cp led/data_service.py :led/data_service.py 
-	mpremote fs cp led/engine.py :led/engine.py 
-	mpremote fs cp led/hardware.py :led/hardware.py 
-	mpremote fs cp led/web_server.py :led/web_server.py 
-	mpremote fs cp led/network_service.py :led/network_service.py 
-	mpremote fs cp led/light_service.py :led/light_service.py 
-	mpremote fs cp led/main.py :main.py 
+	deploy/safe_rmdir.sh led
+	mpremote fs cp -r src/* ":"
 
 deploy-dev: \
 	deploy-web \
@@ -65,7 +55,7 @@ deploy-dev: \
 
 deploy-full: \
 	deploy-cleanup-all \
-	deploy-common \
+	deploy-python-dummies \
 	deploy-microdot \
 	deploy-web \
 	deploy-code \
