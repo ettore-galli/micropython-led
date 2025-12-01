@@ -28,9 +28,8 @@ partial-deploy-warning:
 	@echo ------------------------------------------------
 
 deploy-microdot:
-	deploy/safe_putdir.sh microdot
-	mpremote fs cp microdot/__init__.py :microdot/__init__.py 
-	mpremote fs cp microdot/microdot.py :microdot/microdot.py 
+	deploy/safe_rmdir.sh microdot
+	mpremote fs cp -r microdot :microdot
 
 deploy-data-dir:
 	deploy/safe_putdir.sh data
