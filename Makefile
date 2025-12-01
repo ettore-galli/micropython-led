@@ -36,12 +36,8 @@ deploy-data-dir:
 	deploy/safe_putdir.sh data
 
 deploy-web:
-	deploy/safe_putdir.sh web
-	deploy/safe_putdir.sh web/images
-	mpremote fs cp led/web/led.html :web/led.html 
-	mpremote fs cp led/web/wifi.html :web/wifi.html 
-	mpremote fs cp led/web/ip.html :web/ip.html 
-	mpremote fs cp led/web/static/images/lighthouse.png :web/images/lighthouse.png
+	deploy/safe_rmdir.sh web
+	mpremote fs cp -r led/web :web
 
 deploy-common: 
 	mpremote fs cp python_dummies/typing.py :typing.py 
