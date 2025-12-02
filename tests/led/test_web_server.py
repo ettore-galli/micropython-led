@@ -3,6 +3,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 from led.web_server import (
     WebServer,
+    build_html_page_response,
     get_data_from_request,
     get_page_file_by_id,
     get_raw_page_content,
@@ -30,6 +31,16 @@ def test_get_raw_page_content() -> None:
     assert (
         get_raw_page_content(page_file=str(EXAMPLE_PAGE))
         == "<!DOCTYPE html><html><body>Example</body></html>"
+    )
+
+
+def test_build_html_page_response() -> None:
+    assert build_html_page_response(
+        rendered_html_content="<!DOCTYPE html><html><body>Example</body></html>"
+    ) == (
+        "<!DOCTYPE html><html><body>Example</body></html>",
+        200,
+        {"Content-Type": "text/html"},
     )
 
 

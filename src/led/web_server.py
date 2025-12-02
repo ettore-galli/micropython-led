@@ -29,7 +29,9 @@ def get_raw_page_content(page_file: str) -> str:
         return page.read()
 
 
-def build_page_response(rendered_html_content: str) -> tuple[str, int, dict[str, str]]:
+def build_html_page_response(
+    rendered_html_content: str,
+) -> tuple[str, int, dict[str, str]]:
     return rendered_html_content, HTTP_OK, {"Content-Type": "text/html"}
 
 
@@ -79,7 +81,7 @@ async def process_page_repl(
         raw_data=rendering_data,
     )
 
-    return build_page_response(rendered_html_content=rendered_page)
+    return build_html_page_response(rendered_html_content=rendered_page)
 
 
 class WebServer(BaseWebServer):
