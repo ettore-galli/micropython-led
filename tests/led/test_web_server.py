@@ -1,14 +1,19 @@
+from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
 from led.web_server import (
     WebServer,
     get_data_from_request,
     get_page_file_by_id,
+    get_raw_page_content,
     merge_dictionaries,
     render_page_using_data,
     replace_tag,
 )
 from microdot.microdot import MultiDict  # type: ignore[attr-defined]
+
+DATA_PAGE = Path(__file__).parent / "data" / "pages"
+EXAMPLE_PAGE = DATA_PAGE / "example-page.html"
 
 
 def test_get_page_by_id() -> None:
@@ -19,6 +24,13 @@ def test_get_page_by_id() -> None:
         == "./web/beta.html"
     )
     assert get_page_file_by_id("ip") == "./web/ip.html"
+
+
+def test_get_raw_page_content() -> None:
+    assert (
+        get_raw_page_content(page_file=str(EXAMPLE_PAGE))
+        == "<!DOCTYPE html><html><body>Example</body></html>"
+    )
 
 
 def test_replace_tag() -> None:

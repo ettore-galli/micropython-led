@@ -24,8 +24,8 @@ def get_page_file_by_id(page_id: str, web_pages: dict[str, str] = WEB_PAGES) -> 
     return f"{WEB_PAGES_PATH}/{web_pages.get(page_id)}"
 
 
-def get_raw_page_content(page_id: str) -> str:
-    with open(get_page_file_by_id(page_id), encoding="utf-8") as page:
+def get_raw_page_content(page_file: str) -> str:
+    with open(page_file, encoding="utf-8") as page:
         return page.read()
 
 
@@ -64,7 +64,8 @@ async def process_page_repl(
     invariant_rendering_data: dict[str, Any],
     request: Request,
 ) -> tuple[str, int, dict[str, str]]:
-    raw_page_content: str = get_raw_page_content(page_id=page_id)
+    page_file: str = get_page_file_by_id(page_id=page_id)
+    raw_page_content: str = get_raw_page_content(page_file=page_file)
 
     if request.method == METHOD_POST:
         request_data: dict[str, Any] = get_data_from_request(request=request)
