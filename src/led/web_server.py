@@ -20,19 +20,13 @@ METHOD_GET: str = "GET"
 METHOD_POST: str = "POST"
 
 
-def get_page_file_by_id(page_id: str) -> str:
-    return f"{WEB_PAGES_PATH}/{WEB_PAGES.get(page_id)}"
+def get_page_file_by_id(page_id: str, web_pages: dict[str, str] = WEB_PAGES) -> str:
+    return f"{WEB_PAGES_PATH}/{web_pages.get(page_id)}"
 
 
 def get_raw_page_content(page_id: str) -> str:
     with open(get_page_file_by_id(page_id), encoding="utf-8") as page:
         return page.read()
-
-
-def get_page_content(page_id: str) -> tuple[str, int, dict[str, str]]:
-    with open(get_page_file_by_id(page_id), encoding="utf-8") as page:
-        html_content = page.read()
-        return html_content, HTTP_OK, {"Content-Type": "text/html"}
 
 
 def build_page_response(rendered_html_content: str) -> tuple[str, int, dict[str, str]]:

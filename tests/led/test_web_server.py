@@ -3,11 +3,22 @@ from unittest.mock import AsyncMock, MagicMock
 from led.web_server import (
     WebServer,
     get_data_from_request,
+    get_page_file_by_id,
     merge_dictionaries,
     render_page_using_data,
     replace_tag,
 )
 from microdot.microdot import MultiDict  # type: ignore[attr-defined]
+
+
+def test_get_page_by_id() -> None:
+    assert (
+        get_page_file_by_id(
+            "beta", web_pages={"alfa": "alfa.html", "beta": "beta.html"}
+        )
+        == "./web/beta.html"
+    )
+    assert get_page_file_by_id("ip") == "./web/ip.html"
 
 
 def test_replace_tag() -> None:
