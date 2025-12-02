@@ -128,14 +128,22 @@ class BaseWebServer(ABC):
 
 
 class LightBlinkInformation:
-    def __init__(self, number_of_flashes: int) -> None:
+    def __init__(
+        self,
+        number_of_flashes: int,
+        flash_duration: float,
+        intra_flash_delay: float,
+        intra_loop_delay: float,
+    ) -> None:
         self.number_of_flashes: int = number_of_flashes
-        self.flash_duration: float = 0.2
-        self.intra_flash_delay: float = 0.3
-        self.intra_loop_delay: float = 1.0
+        self.flash_duration: float = flash_duration
+        self.intra_flash_delay: float = intra_flash_delay
+        self.intra_loop_delay: float = intra_loop_delay
 
 
-DEFAULT_LIGHT_BLINK_INFORMATION = LightBlinkInformation(number_of_flashes=3)
+DEFAULT_LIGHT_BLINK_INFORMATION = LightBlinkInformation(
+    number_of_flashes=3, flash_duration=100, intra_flash_delay=150, intra_loop_delay=700
+)
 
 
 class BaseLightService(ABC):

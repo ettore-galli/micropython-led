@@ -56,5 +56,10 @@ def retrieve_light_blink_information() -> LightBlinkInformation:
     data = get_led_data_service()
     info = data.get_data()
     if info:
-        return LightBlinkInformation(number_of_flashes=int(info["number_of_flashes"]))
+        return LightBlinkInformation(
+            number_of_flashes=int(info["number_of_flashes"]),
+            flash_duration=float(info["flash_duration"]),
+            intra_flash_delay=float(info["intra_flash_delay"]),
+            intra_loop_delay=float(info["intra_loop_delay"]),
+        )
     return DEFAULT_LIGHT_BLINK_INFORMATION

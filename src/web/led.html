@@ -42,8 +42,18 @@
     <h1>Configurazione</h1>
 
     <form action="{% action %}" method="post">
-        <label for="number_of_flashes">Number:</label>
+        <label for="number_of_flashes">Number of flashes:</label>
         <input type="number" name="number_of_flashes" id="number_of_flashes" value="{% number_of_flashes %}">
+        
+        <label for="flash_duration">Flash duration [s]:</label>
+        <input type="number" step="0.001" name="flash_duration" id="flash_duration" value="{% flash_duration %}">
+        
+        <label for="intra_flash_delay">Interval between flashes [s]:</label>
+        <input type="number" step="0.001" name="intra_flash_delay" id="intra_flash_delay" value="{% intra_flash_delay %}">
+        
+        <label for="intra_loop_delay">Interval between loops [s]:</label>
+        <input type="number" step="0.001" name="intra_loop_delay" id="intra_loop_delay" value="{% intra_loop_delay %}">
+        
         <input type="submit" value="SAVE">
     </form>
 
