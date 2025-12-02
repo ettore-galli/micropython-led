@@ -98,13 +98,6 @@ class WebServer(BaseWebServer):
         self.wifi_data_service = wifi_data_service
         self.network_data_service = network_data_service
 
-        @self.app.route("/static/images/<path:path>")
-        async def static(_: str, path: str) -> Response:
-            if ".." in path:
-                return "Not found", 404
-            full_file_fqn: str = "web/static/images/" + path
-            return send_file(full_file_fqn, max_age=86400)
-
         @self.app.route("/led", methods=[METHOD_GET, METHOD_POST])
         async def led_page(
             request: Request,
@@ -137,6 +130,13 @@ class WebServer(BaseWebServer):
                 invariant_rendering_data={},
                 request=request,
             )
+
+        @self.app.route("<path:path>")
+        async def static(_: str, path: str) -> Response:
+            if ".." in path:
+                return "Not found", 404
+            full_file_fqn: str = "web/" + path
+            return send_file(full_file_fqn, max_age=86400)
 
     async def startup(self) -> None:
         server = asyncio.create_task(self.app.start_server())
